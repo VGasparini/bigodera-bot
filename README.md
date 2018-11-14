@@ -14,8 +14,6 @@ If you're going to try implement some features, take the bot token with @vgaspar
 If you already had, just run
 
 ```
-    source 'https://rubygems.org'
-    gem 'telegram_bot'
     ruby bot.rb             # localy   
     nohup ruby bot.rb &     # on server
 ```
