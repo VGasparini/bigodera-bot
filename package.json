@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/vgasparini/bigodera-bot/issues"
   },
-  "homepage": "https://github.com/vgasparini/bigodera-bot#readme"
+  "homepage": "https://github.com/vgasparini/bigodera-bot#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0"
+  }
 }

@@ -38,6 +38,16 @@ bot.onText(/porra/i,function(msg) {
     bot.sendMessage(chatId, 'Ambiente Familiar');
 });
 
+bot.onText(/.*(ei|vcs|voces|tu).*[?]/i,function(msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'sim');
+});
+
+bot.onText(/\.$/i,function(msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'O cara é bom!');
+});
+
 bot.onText(/bolso/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Tem que acabar isso dai ta ok');
