@@ -23,6 +23,11 @@ bot.onText(/caga/i,function(msg){
     bot.sendMessage(chatId, 'FELIPE WEISS');
 });
 
+bot.onText(/weiss/i,function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'CAGA PAU');
+});
+
 bot.onText(/pt/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'TREZE');
@@ -61,6 +66,16 @@ bot.onText(/\/meme/,function(msg) {
     var quotes = Array('Weiss caga pau','socável', 'campeão sul brasileiro', 'o balão mais rapido do brasil', 'o cara que anima o time', 'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila');
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, quotes[Math.floor(Math.random()*quotes.length)]);
+});
+
+bot.onText(/\/noite/, function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Boa noite! Durma bem');
+});
+
+bot.onText(/\/dia/, function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Bom dia! Bora ser hoje menos arrombado que ontem');
 });
 
 module.exports = bot;
