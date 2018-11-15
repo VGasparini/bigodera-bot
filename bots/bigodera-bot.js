@@ -78,12 +78,12 @@ bot.onText(/\/meme/,function(msg) {
     bot.sendMessage(chatId, quotes[Math.floor(Math.random()*quotes.length)]);
 });
 
-bot.onText(/\/noite/, function (msg) {
+bot.onText(/noite/, function (msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Boa noite! Durma bem');
 });
 
-bot.onText(/\/dia/, function (msg) {
+bot.onText(/dia/, function (msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Bom dia! Bora ser hoje menos arrombado que ontem');
 });
