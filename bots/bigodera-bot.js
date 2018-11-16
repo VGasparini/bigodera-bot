@@ -1,5 +1,6 @@
 var TelegramBot = require('node-telegram-bot-api');
 var token = require('../token.json');
+var fs = require('fs');
 var bot = new TelegramBot(token.token, {polling: true});
 
 bot.onText(/melhor da vida/i,function(msg) {
@@ -18,12 +19,12 @@ bot.onText(/melhor da vida/i,function(msg) {
     bot.sendMessage(chatId, ret);
 });
 
-bot.onText(/caga/i,function(msg){
+bot.onText(/(caga pau)/i,function(msg){
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'FELIPE WEISS');
 });
 
-bot.onText(/weiss/i,function (msg) {
+bot.onText(/(felipe weiss)/i,function (msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'CAGA PAU');
 });
@@ -38,7 +39,7 @@ bot.onText(/porra/i,function(msg) {
     bot.sendMessage(chatId, 'Ambiente Familiar');
 });
 
-bot.onText(/.*(ei|vcs|voces|tu).*[?]/i,function(msg) {
+bot.onText(/^(bigod).*[?]$/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'sim');
 });
@@ -51,6 +52,16 @@ bot.onText(/\.$/i,function(msg) {
 bot.onText(/bolso/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Tem que acabar isso dai ta ok');
+});
+
+bot.onText(/(boa noite)/i, function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Boa noite! Durma bem');
+});
+
+bot.onText(/(bom dia)/i, function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Bom dia! Bora ser hoje menos arrombado que ontem');
 });
 
 bot.onText(/\/start/,function(msg) {
@@ -78,14 +89,27 @@ bot.onText(/\/meme/,function(msg) {
     bot.sendMessage(chatId, quotes[Math.floor(Math.random()*quotes.length)]);
 });
 
-bot.onText(/noite/, function (msg) {
+bot.onText(/\/contest_stand (.+)/, function (msg) {
+    var handles = Array('viniciuszeiko','_Weiss','carou','jnk','s.Israelf','Markhyz','luizaes');
+    var id_contest = (msg.text).slice(15);
     var chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Boa noite! Durma bem');
+    fs.readFile('../contest.json',"utf8", function(err,data){
+        if (err) {
+            return console.log("Erro ao ler arquivo");
+        }
+        var jsonContest = JSON.parse(data);
+    });
+    handles.forEach(function(element) {
+        var handle = jsonContest.$element;
+        texto = ''.concat(element,' -> ',handle.rank);
+        bot.sendMessage(chatId, );
+        
+    });
 });
 
-bot.onText(/dia/, function (msg) {
+bot.onText(/luz/i, function (msg) {
     var chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Bom dia! Bora ser hoje menos arrombado que ontem');
+    bot.sendMessage(chatId, 'vao tudo tomar no cu');
 });
 
 module.exports = bot;
@@ -95,3 +119,4 @@ module.exports = bot;
 String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+
