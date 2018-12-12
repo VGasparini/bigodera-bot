@@ -20,3 +20,6 @@ If you already had, just run
 ```node.js
     node index.js
 ```
+```python3
+    python3 bot.py
+```

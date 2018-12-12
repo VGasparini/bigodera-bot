@@ -3,7 +3,7 @@ var token = require('../token.json');
 var fs = require('fs');
 var bot = new TelegramBot(token.token, {polling: true});
 
-bot.onText(/melhor da vida/i,function(msg) {
+bot.onText(/.*melhor .*vida/i,function(msg) {
     var chatId = msg.chat.id;
     var n = Math.random() * 9;
     var ret;
@@ -44,7 +44,7 @@ bot.onText(/^(bigod).*[?]$/i,function(msg) {
     bot.sendMessage(chatId, 'sim');
 });
 
-bot.onText(/\.$/i,function(msg) {
+bot.onText(/.*gasp \.$/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'O cara é bom!');
 });
@@ -52,6 +52,11 @@ bot.onText(/\.$/i,function(msg) {
 bot.onText(/bolso/i,function(msg) {
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, 'Tem que acabar isso dai ta ok');
+});
+
+bot.onText(/('\.'|'-'|XD|u\.u|@\.@|\.-\.|:c)/i, function (msg) {
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'lixo');
 });
 
 bot.onText(/(boa noite)/i, function (msg) {
@@ -87,24 +92,6 @@ bot.onText(/\/meme/,function(msg) {
     var quotes = Array('Weiss caga pau','socável', 'campeão sul brasileiro', 'o balão mais rapido do brasil', 'o cara que anima o time', 'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila');
     var chatId = msg.chat.id;
     bot.sendMessage(chatId, quotes[Math.floor(Math.random()*quotes.length)]);
-});
-
-bot.onText(/\/contest_stand (.+)/, function (msg) {
-    var handles = Array('viniciuszeiko','_Weiss','carou','jnk','s.Israelf','Markhyz','luizaes');
-    var id_contest = (msg.text).slice(15);
-    var chatId = msg.chat.id;
-    fs.readFile('../contest.json',"utf8", function(err,data){
-        if (err) {
-            return console.log("Erro ao ler arquivo");
-        }
-        var jsonContest = JSON.parse(data);
-    });
-    handles.forEach(function(element) {
-        var handle = jsonContest.$element;
-        texto = ''.concat(element,' -> ',handle.rank);
-        bot.sendMessage(chatId, );
-        
-    });
 });
 
 bot.onText(/luz/i, function (msg) {
