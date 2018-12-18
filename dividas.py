@@ -1,38 +1,35 @@
 from pprint import pprint
 
-dividas = dict()
-dividas['gasp'] = dict(jonck=0,weiss=0)
-dividas['jonck'] = dict(gasp=0,weiss=0)
-dividas['weiss'] = dict(jonck=0,gasp=0)
+names = {
+    'viniciuszeiko':'Gasparini',
+    'luizaes':'Luiza',
+    'fweiss':'Weiss',
+    'jonckjunior':'Jonck',
+    'carolinesala':'Carol'
+}
 
-def add_divida(me,info):
-    who = info.split()[0]
-    value = int(info.split()[1])
+dividas = dict()
+dividas['gasparini'] = dict(jonck=0,weiss=0,luiza=0)
+dividas['luiza'] = dict(gasparini=0,weiss=0,jonckr=0)
+dividas['weiss'] = dict(jonck=0,gasparini=0,luiza=0)
+dividas['jonck'] = dict(weiss=0,gasparini=0,luiza=0)
+
+def add_div(me,info):
+    me = names[me].lower()
+    who = info.split()[0].lower()
+    value = float(info.split()[1])
     if(dividas[who][me]): pagar_divida(who,me+' '+str(value))
     dividas[me][who] += value
 
-def pagar_divida(me,info):
-    who = info.split()[0]
-    value = int(info.split()[1])
+def pagar_div(me,info):
+    me = names[me].lower()
+    who = info.split()[0].lower()
+    value = float(info.split()[1])
     dividas[me][who] -= value
 
-def show_divida(me):
+def show_div(me):
+    me = names[me].lower()
     t = dividas[me]
     for x in t.items():
         if(x[1]):
-            print(x[0],'deve',x[1],'ao',me)
-
-
-op1 = 'jonck 15'
-op2 = 'weiss 1'
-op3 = 'jonck 5'
-op4 = 'gasp 10'
-
-
-add('gasp',op1)
-add('gasp',op2)
-add('gasp',op3)
-add('jonck',op4)
-show('gasp')
-
-
+            return '{} deve {:.2f} ao {}'.format(x[0].capitalize(),x[1],me.capitalize())

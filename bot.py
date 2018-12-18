@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 import logging
 import json
 import random as r
+from dividas import *
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -78,27 +79,55 @@ def start(bot, update):
 
 def help(bot, update):
     chat_id = update.message.chat_id
-    text = 'Tenho as seguintes funcionalidade\n / start - Me acorda caso esteja dormindo\n / greet - Saudação\n / meme - Frases icônicas de pessoas mais ainda'
+    text = ('Tenho as seguintes funcionalidade\n'+
+            '/start - Me acorda caso esteja dormindo\n'+
+            '/greet - Saudação\n'+
+            '/meme - Frases icônicas de pessoas mais ainda\n'+
+            '/divida - Controle pras nossas dividas. (digite "/divida help" para aprender)')
     bot.sendMessage(chat_id = chat_id, text = text)
 
 def greet(bot, update):
-    pre = ['e ai ', 'opa ', 'olá ', 'oie ', 'turu bom ']
+    pre = ['E ai ', 'Opa ', 'Olá ', 'Oie ', 'Turu bom ']
     suf = ['pro URI', 'pro RU', 'pro codeforces', 'pro code', 'pra maratona']
     g1 = pre[r.randrange(len(pre))]
     g2 = suf[r.randrange(len(pre))]
     chat_id = update.message.chat_id
-    who = bot.first_name
+    who = update.message.from_user.first_name
     text = g1 + who.capitalize() + ', bem vindo ao BRUTE. Eu o Bigodera, o bot desssa galera. Bora ' + g2
     bot.send_message(chat_id = chat_id, text = text)
 
 def meme(bot, update):
-    quotes=['Weiss caga pau', 'socável', 'campeão sul brasileiro',
+    quotes = ['Weiss caga pau', 'socável', 'campeão sul brasileiro',
     'o balão mais rapido do brasil', 'o cara que anima o time',
     'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
-    'sou o mais parceiro']
+    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson']
     chat_id = update.message.chat_id
     text = quotes[r.randrange(len(quotes))]
     bot.send_message(chat_id = chat_id, text = text)
+
+def divida(bot, update):
+    text = update.message.text  
+    if 'deve' in text: # /divida jonck me deve 15
+        me = update.message.from_user.username
+        t = text.split()
+        to = t[1]
+        val = t[-1]
+        add_div(me,to+' '+val)
+    if 'paguei' in text: # /divida paguei 15 ao jonck
+        me = update.message.from_user.username
+        t = text.split()
+        to = t[-1]
+        val = t[2]
+        add_div(me,to+' '+val)
+    if 'minhas dividas' in text:
+        me = update.message.from_user.username
+        update.message.reply_text(show_div(me))
+    if 'help' in text:
+        bot.send_message(chat_id = update.message.chat_id,
+                                    text = '/divida (quem te deve) me deve (valor)\n'+
+                                            '/divida paguei (valor) (quem tu pagou)\n\n'+
+                                            'Padrão dos nomes\n'+
+                                            'Gasparini\nWeiss\nCarol\nJonck\nLuiza')
 
 def error(bot, update, error):
         """Log Errors caused by Updates."""
@@ -115,6 +144,7 @@ def main():
         dp.add_handler(CommandHandler("help", help))
         dp.add_handler(CommandHandler("greet", greet))
         dp.add_handler(CommandHandler("meme", meme))
+        dp.add_handler(CommandHandler("divida", divida))
 
         # Noncommand answser message on Telegram
         dp.add_handler(MessageHandler(Filters.text, noncommand))
