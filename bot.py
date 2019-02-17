@@ -1,15 +1,14 @@
+# -*- coding: utf-8 -*-
+import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 import logging
 import json
 import random as r
-from dividas import *
 
-# Enable logging
+token = os.environ['TELEGRAM_TOKEN']
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
-
 logger = logging.getLogger(__name__)
-token = open("token", "r").read()
 updater = Updater(token)
 
 # Functions noncommand
@@ -83,7 +82,7 @@ def help(bot, update):
             '/start - Me acorda caso esteja dormindo\n'+
             '/greet - Saudação\n'+
             '/meme - Frases icônicas de pessoas mais ainda\n'+
-            '/divida - Controle pras nossas dividas. (digite "/divida help" para aprender)')
+            '/divida - Controle nossas dividas. (digite "/divida help" para aprender)')
     bot.sendMessage(chat_id = chat_id, text = text)
 
 def greet(bot, update):
@@ -100,42 +99,42 @@ def meme(bot, update):
     quotes = ['Weiss caga pau', 'socável', 'campeão sul brasileiro',
     'o balão mais rapido do brasil', 'o cara que anima o time',
     'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
-    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson']
+    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
+    'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
+    'qué vê?', 'se der bizu…', 'confia no rand()']
     chat_id = update.message.chat_id
     text = quotes[r.randrange(len(quotes))]
     bot.send_message(chat_id = chat_id, text = text)
 
-def divida(bot, update):
-    text = update.message.text  
-    if 'deve' in text: # /divida jonck me deve 15
-        me = update.message.from_user.username
-        t = text.split()
-        to = t[1]
-        val = t[-1]
-        add_div(me,to+' '+val)
-    if 'paguei' in text: # /divida paguei 15 ao jonck
-        me = update.message.from_user.username
-        t = text.split()
-        to = t[-1]
-        val = t[2]
-        add_div(me,to+' '+val)
-    if 'minhas dividas' in text:
-        me = update.message.from_user.username
-        update.message.reply_text(show_div(me))
-    if 'help' in text:
-        bot.send_message(chat_id = update.message.chat_id,
-                                    text = '/divida (quem te deve) me deve (valor)\n'+
-                                            '/divida paguei (valor) (quem tu pagou)\n\n'+
-                                            'Padrão dos nomes\n'+
-                                            'Gasparini\nWeiss\nCarol\nJonck\nLuiza')
+# def divida(bot, update):
+#     text = update.message.text  
+#     if 'deve' in text: # /divida jonck me deve 15
+#         me = update.message.from_user.username
+#         t = text.split()
+#         to = t[1]
+#         val = t[-1]
+#         add_div(me,to+' '+val)
+#     if 'paguei' in text: # /divida paguei 15 ao jonck
+#         me = update.message.from_user.username
+#         t = text.split()
+#         to = t[-1]
+#         val = t[2]
+#         add_div(me,to+' '+val)
+#     if 'minhas dividas' in text:
+#         me = update.message.from_user.username
+#         update.message.reply_text(show_div(me))
+#     if 'help' in text:
+#         bot.send_message(chat_id = update.message.chat_id,
+#                                     text = '/divida (quem te deve) me deve (valor)\n'+
+#                                             '/divida paguei (valor) (quem tu pagou)\n\n'+
+#                                             'Padrão dos nomes\n'+
+#                                             'Gasparini\nWeiss\nCarol\nJonck\nLuiza')
 
 def error(bot, update, error):
-        """Log Errors caused by Updates."""
         logger.warning('Update "%s" caused error "%s"', update, error)
 
 def main():
         """Start the bot."""
-        # Create the EventHandler and pass it your bot's token.
         # Get the dispatcher to register handlers
         dp = updater.dispatcher
 
@@ -144,7 +143,7 @@ def main():
         dp.add_handler(CommandHandler("help", help))
         dp.add_handler(CommandHandler("greet", greet))
         dp.add_handler(CommandHandler("meme", meme))
-        dp.add_handler(CommandHandler("divida", divida))
+        # dp.add_handler(CommandHandler("divida", divida))
 
         # Noncommand answser message on Telegram
         dp.add_handler(MessageHandler(Filters.text, noncommand))
@@ -155,8 +154,6 @@ def main():
         # Start the Bot
         updater.start_polling()
 
-        # Run the bot until you press Ctrl-C or the process receives SIGINT,
-        # SIGTERM or SIGABRT. This should be used most of the time, since
         # start_polling() is non-blocking and will stop the bot gracefully.
         updater.idle()
 
