@@ -126,7 +126,7 @@ def roll(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def even_odd(bot, update):
-    if r.randrange(1):
+    if r.randrange(2):
         text = "Impar"
     else:
         text = "Par"
