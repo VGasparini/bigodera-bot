@@ -86,7 +86,8 @@ def help(bot, update):
             '/start - Me acorda caso esteja dormindo\n'+
             '/greet - Saudação\n'+
             '/meme - Frases icônicas de pessoas mais ainda\n'+
-            '/roll n t - Rola n dados de t faces')
+            '/roll n t - Rola n dados de t faces\n'+
+            '/even_odd - O famoso par ou impar')
     bot.sendMessage(chat_id = chat_id, text = text)
 
 def greet(bot, update):
@@ -121,6 +122,14 @@ def roll(bot, update):
             text += str(r.randint(1,limit))+"\n"
     else:
         text = str(r.randint(1,6))+"\n"
+    chat_id = update.message.chat_id
+    bot.send_message(chat_id = chat_id, text = text)
+
+def even_odd(bot, update):
+    if r.randrange(1):
+        text = "Impar"
+    else:
+        text = "Par"
     chat_id = update.message.chat_id
     bot.send_message(chat_id = chat_id, text = text)
 
@@ -163,6 +172,7 @@ def main():
         dp.add_handler(CommandHandler("greet", greet))
         dp.add_handler(CommandHandler("meme", meme))
         dp.add_handler(CommandHandler("roll", roll))
+        dp.add_handler(CommandHandler("even_odd", even_odd))
         # dp.add_handler(CommandHandler("divida", divida))
 
         # Noncommand answser message on Telegram
