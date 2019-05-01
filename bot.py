@@ -5,8 +5,7 @@ import logging
 import json
 import random as r
 
-# token = os.environ['TELEGRAM_TOKEN']
-token = '753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU'
+token = os.environ['TELEGRAM_TOKEN']
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
