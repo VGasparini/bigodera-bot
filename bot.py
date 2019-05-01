@@ -5,7 +5,8 @@ import logging
 import json
 import random as r
 
-token = os.environ['TELEGRAM_TOKEN']
+# token = os.environ['TELEGRAM_TOKEN']
+token = '753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU'
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -111,8 +112,13 @@ def meme(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def roll(bot, update):
-    limit = int(update.message.text.split()[-1])    
-    n = r.randint(1,limit)
+    text = update.message.text.split()[1:]
+    times,limit = map(int,text)
+    text = "Rolando!\n\n"
+    for dice in range(1,times+1):
+        text += str(r.randint(1,limit))+"\n"
+    chat_id = update.message.chat_id
+    bot.send_message(chat_id = chat_id, text = text)
 
 
 # def divida(bot, update):
