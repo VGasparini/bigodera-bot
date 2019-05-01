@@ -112,11 +112,15 @@ def meme(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def roll(bot, update):
-    text = update.message.text.split()[1:]
-    times,limit = map(int,text)
-    text = "Rolando!\n\n"
-    for dice in range(1,times+1):
-        text += str(r.randint(1,limit))+"\n"
+    text = update.message.text.split()
+    if (len(text)>1):
+        text = update.message.text.split()[1:]
+        times,limit = map(int,text)
+        text = "Rolando!\n\n"
+        for dice in range(1,times+1):
+            text += str(r.randint(1,limit))+"\n"
+    else:
+        text = str(r.randint(1,6))+"\n"
     chat_id = update.message.chat_id
     bot.send_message(chat_id = chat_id, text = text)
 
