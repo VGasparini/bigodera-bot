@@ -33,10 +33,12 @@ def noncommand(bot, update):
         ret = bom_dia()
     elif 'boa noite' in text:
         ret = boa_noite()
+    elif 'melhor da vida' in text:
+        ret = melhor_vida()
       
     if ret: update.message.reply_text(ret)
 
-def melhor_vida(bot, update):
+def melhor_vida():
     quotes = ['pao de alho', 'acordar cedo e lembrar que é sábado', 'mijar apertado',
             'borda recheada de brinde', 'quando chega o que vc comprou pela internet',
             'frete grátis', 'achar dinheiro no bolso', 'wifi grátis', 'final da nacional']
@@ -70,6 +72,7 @@ def boa_noite():
 def bom_dia():
     return 'Bom dia! Bora ser hoje menos arrombado que ontem'
 
+
 #Functions commanded
 def start(bot, update):
     chat_id = update.message.chat_id
@@ -82,7 +85,7 @@ def help(bot, update):
             '/start - Me acorda caso esteja dormindo\n'+
             '/greet - Saudação\n'+
             '/meme - Frases icônicas de pessoas mais ainda\n'+
-            '/divida - Controle nossas dividas. (digite "/divida help" para aprender)')
+            '/roll n - Rola um dado n ')
     bot.sendMessage(chat_id = chat_id, text = text)
 
 def greet(bot, update):
@@ -101,10 +104,16 @@ def meme(bot, update):
     'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
     'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
     'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
-    'qué vê?', 'se der bizu…', 'confia no rand()']
+    'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
+    'gadão']
     chat_id = update.message.chat_id
     text = quotes[r.randrange(len(quotes))]
     bot.send_message(chat_id = chat_id, text = text)
+
+def roll(bot, update):
+    limit = int(update.message.text.split()[-1])    
+    n = r.randint(1,limit)
+
 
 # def divida(bot, update):
 #     text = update.message.text  
@@ -143,6 +152,7 @@ def main():
         dp.add_handler(CommandHandler("help", help))
         dp.add_handler(CommandHandler("greet", greet))
         dp.add_handler(CommandHandler("meme", meme))
+        dp.add_handler(CommandHandler("roll", roll))
         # dp.add_handler(CommandHandler("divida", divida))
 
         # Noncommand answser message on Telegram
