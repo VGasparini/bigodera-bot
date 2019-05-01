@@ -86,7 +86,7 @@ def help(bot, update):
             '/start - Me acorda caso esteja dormindo\n'+
             '/greet - Saudação\n'+
             '/meme - Frases icônicas de pessoas mais ainda\n'+
-            '/roll n - Rola um dado n ')
+            '/roll n t - Rola n dados de t faces')
     bot.sendMessage(chat_id = chat_id, text = text)
 
 def greet(bot, update):
