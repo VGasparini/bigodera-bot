@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import Chat
 import logging
-import json
 import random as r
+import time
 
 token = os.environ['TELEGRAM_TOKEN']
+# token = '753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU'
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -112,6 +114,7 @@ def greet(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def meme(bot, update):
+    global quotes
     chat_id = update.message.chat_id
     text = r.choice(tuple(quotes))
     bot.send_message(chat_id = chat_id, text = text)
@@ -126,9 +129,12 @@ def roll(bot, update):
     text = update.message.text.split()
     if (len(text)>1):
         times,limit = map(int,text[1:])
-        text = "Rolando!\n\n"
-        for dice in range(1,times+1):
-            text += str(r.randint(1,limit))+"\n"
+        if times<100:
+            text = "Rolando!\n\n"
+            for dice in range(1,times+1):
+                text += str(r.randint(1,limit))+"\n"
+        else:
+            text = "Vsf! Porrada de dado"
     else:
         text = str(r.randint(1,6))+"\n"
     chat_id = update.message.chat_id
@@ -143,22 +149,26 @@ def even_odd(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def mute(bot, update):
-    def get_user(user):
-        return user.user()
-    users = list(get_user,update.chat.get_administrators())
-    user = update.message.user()
-    text = user+" -- "+'*'.join(users)
-    """
-    if (len(text)>1):
-        who = text[1]
-        times,limit = map(int,text)
-        text = "Rolando!\n\n"
-        for dice in range(1,times+1):
-            text += str(r.randint(1,limit))+"\n"
-    else:
-        text = 'Machado mutado'"""
     chat_id = update.message.chat_id
-    bot.send_message(chat_id = chat_id, text = text)
+    admins = [str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)]
+    user = update.message.from_user.username
+    who = '705600029'
+    if user in admins:
+        bot.send_message(chat_id = chat_id, text = 'Cala a boca Machado...')
+    else:
+        bot.send_message(chat_id = chat_id, text = 'So para admins')
+    bot.restrict_chat_member(chat_id, who, can_send_messages=False)
+
+def unmute(bot, update):
+    chat_id = update.message.chat_id
+    admins = [str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)]
+    user = update.message.from_user.username
+    who = '705600029'
+    if user in admins:
+        bot.send_message(chat_id = chat_id, text = 'Fala gado!')
+    else:
+        bot.send_message(chat_id = chat_id, text = 'So para admins')
+    bot.promote_chat_member(chat_id, who)
 
 
 # def divida(bot, update):
@@ -204,7 +214,7 @@ def main():
     dp.add_handler(CommandHandler("roll", roll))
     dp.add_handler(CommandHandler("even_odd", even_odd))
     dp.add_handler(CommandHandler("mute", mute))
-    #dp.add_handler(CommandHandler("unmute", unmute))
+    dp.add_handler(CommandHandler("unmute", unmute))
     # dp.add_handler(CommandHandler("divida", divida))
 
     # Noncommand answser message on Telegram
@@ -221,12 +231,11 @@ def main():
 
 
 if __name__ == '__main__':
+    quotes = set(('Weiss caga pau', 'socável', 'campeão sul brasileiro',
+        'o balão mais rapido do brasil', 'o cara que anima o time',
+        'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
+        'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
+        'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
+        'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
+        'gadão'))
     main()  
-
-quotes = set(('Weiss caga pau', 'socável', 'campeão sul brasileiro',
-    'o balão mais rapido do brasil', 'o cara que anima o time',
-    'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
-    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
-    'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
-    'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
-    'gadão'))
