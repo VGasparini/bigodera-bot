@@ -63,8 +63,8 @@ def cara_bom():
     return 'O cara é bom!'
 
 def carinhas():
-    quotes = ["'-'","'.'","XD","u.u","@.@",".-.",":c"]
-    return quotes[r.randrange(len(quotes))]
+    carinhas = ["'-'","'.'","XD","u.u","@.@",".-.",":c"]
+    return carinhas[r.randrange(len(carinhas))]
 
 def boa_noite():
     return 'Boa noite! Durma bem'
@@ -85,9 +85,21 @@ def help(bot, update):
             '/start - Me acorda caso esteja dormindo\n'+
             '/greet - Saudação\n'+
             '/meme - Frases icônicas de pessoas mais ainda\n'+
+            '/add_meme - Não precisa explicar\n'+
             '/roll n t - Rola n dados de t faces\n'+
-            '/even_odd - O famoso par ou impar')
+            '/even_odd - O famoso par ou impar\n'+
+            '/mute user - Apenas admins, deixa o user mutado\n'+
+            '/unmute - Não precisa explicar')
     bot.sendMessage(chat_id = chat_id, text = text)
+
+def on(bot,update):
+    bot.send_message(chat_id = update.message.chat_id, text = 'To de pé rs')
+
+def export_meme(bot,update):
+    text = ''
+    for meme in quotes:
+        text += meme+'\n'
+    bot.send_message(chat_id = update.message.chat_id, text = text)
 
 def greet(bot, update):
     pre = ['E ai ', 'Opa ', 'Olá ', 'Oie ', 'Turu bom ']
@@ -100,22 +112,20 @@ def greet(bot, update):
     bot.send_message(chat_id = chat_id, text = text)
 
 def meme(bot, update):
-    quotes = ['Weiss caga pau', 'socável', 'campeão sul brasileiro',
-    'o balão mais rapido do brasil', 'o cara que anima o time',
-    'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
-    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
-    'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
-    'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
-    'gadão']
     chat_id = update.message.chat_id
-    text = quotes[r.randrange(len(quotes))]
+    text = r.choice(tuple(quotes))
     bot.send_message(chat_id = chat_id, text = text)
+
+def add_meme(bot, update):
+    chat_id = update.message.chat_id
+    text = ' '.join(update.message.text.split()[1:])
+    quotes.add(text)
+    bot.send_message(chat_id = chat_id, text = 'Adicionado. Memes ativos: {}'.format(len(quotes)))
 
 def roll(bot, update):
     text = update.message.text.split()
     if (len(text)>1):
-        text = update.message.text.split()[1:]
-        times,limit = map(int,text)
+        times,limit = map(int,text[1:])
         text = "Rolando!\n\n"
         for dice in range(1,times+1):
             text += str(r.randint(1,limit))+"\n"
@@ -129,6 +139,24 @@ def even_odd(bot, update):
         text = "Impar"
     else:
         text = "Par"
+    chat_id = update.message.chat_id
+    bot.send_message(chat_id = chat_id, text = text)
+
+def mute(bot, update):
+    def get_user(user):
+        return user.user()
+    users = list(get_user,update.chat.get_administrators())
+    user = update.message.user()
+    text = user+" -- "+'*'.join(users)
+    """
+    if (len(text)>1):
+        who = text[1]
+        times,limit = map(int,text)
+        text = "Rolando!\n\n"
+        for dice in range(1,times+1):
+            text += str(r.randint(1,limit))+"\n"
+    else:
+        text = 'Machado mutado'"""
     chat_id = update.message.chat_id
     bot.send_message(chat_id = chat_id, text = text)
 
@@ -161,31 +189,44 @@ def error(bot, update, error):
         logger.warning('Update "%s" caused error "%s"', update, error)
 
 def main():
-        """Start the bot."""
-        # Get the dispatcher to register handlers
-        dp = updater.dispatcher
+    """Start the bot."""
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
 
-        # Answer in Telegram
-        dp.add_handler(CommandHandler("start", start))
-        dp.add_handler(CommandHandler("help", help))
-        dp.add_handler(CommandHandler("greet", greet))
-        dp.add_handler(CommandHandler("meme", meme))
-        dp.add_handler(CommandHandler("roll", roll))
-        dp.add_handler(CommandHandler("even_odd", even_odd))
-        # dp.add_handler(CommandHandler("divida", divida))
+    # Answer in Telegram
+    dp.add_handler(CommandHandler("on", on))
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("greet", greet))
+    dp.add_handler(CommandHandler("meme", meme))
+    dp.add_handler(CommandHandler("add_meme", add_meme))
+    dp.add_handler(CommandHandler("export_meme", export_meme))
+    dp.add_handler(CommandHandler("roll", roll))
+    dp.add_handler(CommandHandler("even_odd", even_odd))
+    dp.add_handler(CommandHandler("mute", mute))
+    #dp.add_handler(CommandHandler("unmute", unmute))
+    # dp.add_handler(CommandHandler("divida", divida))
 
-        # Noncommand answser message on Telegram
-        dp.add_handler(MessageHandler(Filters.text, noncommand))
+    # Noncommand answser message on Telegram
+    dp.add_handler(MessageHandler(Filters.text, noncommand))
 
-        # log all errors
-        dp.add_error_handler(error)
+    # log all errors
+    dp.add_error_handler(error)
 
-        # Start the Bot
-        updater.start_polling()
+    # Start the Bot
+    updater.start_polling()
 
-        # start_polling() is non-blocking and will stop the bot gracefully.
-        updater.idle()
+    # start_polling() is non-blocking and will stop the bot gracefully.
+    updater.idle()
 
 
 if __name__ == '__main__':
-        main()  
+    main()  
+
+quotes = set(('Weiss caga pau', 'socável', 'campeão sul brasileiro',
+    'o balão mais rapido do brasil', 'o cara que anima o time',
+    'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
+    'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
+    'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
+    'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
+    'gadão'))
