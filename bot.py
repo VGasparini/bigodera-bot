@@ -5,140 +5,131 @@ from telegram import Chat
 import logging
 import random as r
 import time
+from math import sqrt
+from itertools import count, islice
 
-token = os.environ['TELEGRAM_TOKEN']
-# token = '753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU'
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+token = os.environ["TELEGRAM_TOKEN"]
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 updater = Updater(token)
 
 # Functions noncommand
 def noncommand(bot, update):
     text = (update.message.text).lower()
-    ret = ''
-    if 'caga pau' in text:
-        ret = caga_pau()
-    elif 'felipe weiss' in text:
-        ret = felipe_weiss()
-    elif 'pt' in text:
-        ret = pt()
-    elif 'porra' in text:
-        ret = familiar()
-    elif 'bigod' in text and text[-1] == '?':
-        ret = bigodera_pergunta()
-    elif 'gasp' in text and text[-1] == '.':
-        ret = cara_bom()
-    elif 'cara' == text.split()[0]:
-        ret = carinhas()
-    elif 'bom dia' in text:
-        ret = bom_dia()
-    elif 'boa noite' in text:
-        ret = boa_noite()
-    elif 'melhor da vida' in text:
-        ret = melhor_vida()
-      
-    if ret: update.message.reply_text(ret)
-
-def melhor_vida():
-    quotes = ['pao de alho', 'acordar cedo e lembrar que é sábado', 'mijar apertado',
-            'borda recheada de brinde', 'quando chega o que vc comprou pela internet',
-            'frete grátis', 'achar dinheiro no bolso', 'wifi grátis', 'final da nacional']
-    return quotes[r.randrange(len(quotes))]
-
-def caga_pau():
-    return 'FELIPE WEISS'
-
-def felipe_weiss():
-    return 'CAGA PAU'
-
-def pt():
-    return 'TREZE'
-
-def familiar():
-    return 'Ambiente Familiar'
-
-def bigodera_pergunta():
-    return 'sim'
-
-def cara_bom():
-    return 'O cara é bom!'
-
-def carinhas():
-    carinhas = ["'-'","'.'","XD","u.u","@.@",".-.",":c"]
-    return carinhas[r.randrange(len(carinhas))]
-
-def boa_noite():
-    return 'Boa noite! Durma bem'
-
-def bom_dia():
-    return 'Bom dia! Bora ser hoje menos arrombado que ontem'
+    ret = ""
+    if "caga pau" in text:
+        ret = "FELIPE WEISS"
+    elif "felipe weiss" in text:
+        ret = "caga pau"
+    elif "sei la" in text:
+        ret = "treze"
+    elif "porra" in text and "caralho" in text:
+        ret = "Ambiente Familiar"
+    elif "bigod" in text and text[-1] == "?":
+        ret = "sim"
+    elif "gasp" in text and text[-1] == ".":
+        ret = "cara é bom!"
+    elif "cara" == text.split()[0]:
+        carinhas = ["'-'", "'.'", "XD", "u.u", "@.@", ".-.", ":c"]
+        ret = r.choice(carinhas)
+    elif "bom dia" in text and text[-1] == "!":
+        ret = "O sol nasceu na puta que pariu do horizonte, para iluminar a porra dos seus sonhos, bom dia filha da putaaa"
+    elif "boa noite" in text:
+        ret = "Já vai tarde..."
+    elif "melhor da vida" in text:
+        quotes = [
+            "pao de alho",
+            "acordar cedo e lembrar que é sábado",
+            "mijar apertado",
+            "borda recheada de brinde",
+            "quando chega o que vc comprou pela internet",
+            "frete grátis",
+            "achar dinheiro no bolso",
+            "wifi grátis",
+            "final da nacional",
+        ]
+        ret = r.choice(quotes)
+    if ret:
+        update.message.reply_text(ret)
 
 
-#Functions commanded
+# Functions commanded
 def start(bot, update):
     chat_id = update.message.chat_id
-    text = 'Bigodera acordado! Agora você já pode utilizar alguns de meus comando. Tente por /help'
-    bot.sendMessage(chat_id = chat_id, text = text)
+    text = "Bigodera acordado! Agora você já pode utilizar alguns de meus comando. Tente por /help"
+    bot.sendMessage(chat_id=chat_id, text=text)
+
 
 def help(bot, update):
     chat_id = update.message.chat_id
-    text = ('Tenho as seguintes funcionalidade\n'+
-            '/start - Me acorda caso esteja dormindo\n'+
-            '/greet - Saudação\n'+
-            '/meme - Frases icônicas de pessoas mais ainda\n'+
-            '/add_meme - Não precisa explicar\n'+
-            '/roll n t - Rola n dados de t faces\n'+
-            '/even_odd - O famoso par ou impar\n'+
-            '/mute user - Apenas admins, deixa o user mutado\n'+
-            '/unmute - Não precisa explicar')
-    bot.sendMessage(chat_id = chat_id, text = text)
+    text = (
+        "Tenho as seguintes funcionalidades\n"
+        + "/start - Me acorda caso esteja dormindo\n"
+        + "/meme - Frases icônicas de pessoas mais ainda\n"
+        + "/add_meme meme - Adicionar um meme\n"
+        + "/roll n t - Rola n dados de t faces\n"
+        + "/even_odd - O famoso par ou impar\n"
+        + "/primo n - Verifica se n é primo\n"
+        + "/mute - Apenas admins, muta o Machado\n"
+        + "/unmute - Deixa o garoto falar merda vai..."
+    )
+    bot.sendMessage(chat_id=chat_id, text=text)
 
-def on(bot,update):
-    bot.send_message(chat_id = update.message.chat_id, text = 'To de pé rs')
 
-def export_meme(bot,update):
-    text = ''
-    for meme in quotes:
-        text += meme+'\n'
-    bot.send_message(chat_id = update.message.chat_id, text = text)
+def on(bot, update):
+    update.message.reply_text("To de pé rs")
+
 
 def greet(bot, update):
-    pre = ['E ai ', 'Opa ', 'Olá ', 'Oie ', 'Turu bom ']
-    suf = ['pro URI', 'pro RU', 'pro codeforces', 'pro code', 'pra maratona']
-    g1 = pre[r.randrange(len(pre))]
-    g2 = suf[r.randrange(len(pre))]
+    pre = ["E ai ", "Opa ", "Olá ", "Oie ", "Turu bom "]
+    suf = ["pro URI", "pro RU", "pro codeforces", "pro code", "pra maratona"]
     chat_id = update.message.chat_id
-    who = update.message.from_user.first_name
-    text = g1 + who.capitalize() + ', bem vindo ao BRUTE. Eu o Bigodera, o bot desssa galera. Bora ' + g2
-    bot.send_message(chat_id = chat_id, text = text)
+    for new_user_obj in update.message.new_chat_members:
+        text = "{} {}, bem vindo ao BRUTE. Eu o Bigodera, o bot desssa galera. Bora {}!".format(
+            r.choice(pre), new_user_obj["first_name"], r.choice(suf)
+        )
+        bot.send_message(chat_id=chat_id, text=text)
+
 
 def meme(bot, update):
-    global quotes
-    chat_id = update.message.chat_id
-    text = r.choice(tuple(quotes))
-    bot.send_message(chat_id = chat_id, text = text)
+    global memes
+    text = r.choice(tuple(memes))
+    update.message.reply_text(text)
+
 
 def add_meme(bot, update):
-    chat_id = update.message.chat_id
-    text = ' '.join(update.message.text.split()[1:])
-    quotes.add(text)
-    bot.send_message(chat_id = chat_id, text = 'Adicionado. Memes ativos: {}'.format(len(quotes)))
+    text = " ".join(update.message.text.split()[1:])
+    if len(text) < 5:
+        update.message.reply_text("Que meme mixuruca... vou botar isso não")
+    else:
+        memes.add(text)
+        update.message.reply_text("Adicionado. Memes ativos: {}".format(len(memes)))
+
+
+def export_meme(bot, update):
+    text = ""
+    for meme in memes:
+        text += meme + "\n"
+    bot.send_message(chat_id=update.message.chat_id, text=text)
+
 
 def roll(bot, update):
     text = update.message.text.split()
-    if (len(text)>1):
-        times,limit = map(int,text[1:])
-        if times<100:
+    if len(text) > 1:
+        times, limit = map(int, text[1:])
+        if times < 50:
             text = "Rolando!\n\n"
-            for dice in range(1,times+1):
-                text += str(r.randint(1,limit))+"\n"
+            for dice in range(1, times + 1):
+                text += str(r.randint(1, limit)) + "\n"
         else:
             text = "Vsf! Porrada de dado"
     else:
-        text = str(r.randint(1,6))+"\n"
+        text = str(r.randint(1, 6)) + "\n"
     chat_id = update.message.chat_id
-    bot.send_message(chat_id = chat_id, text = text)
+    bot.send_message(chat_id=chat_id, text=text)
+
 
 def even_odd(bot, update):
     if r.randrange(2):
@@ -146,57 +137,64 @@ def even_odd(bot, update):
     else:
         text = "Par"
     chat_id = update.message.chat_id
-    bot.send_message(chat_id = chat_id, text = text)
+    bot.send_message(chat_id=chat_id, text=text)
+
+
+def primo(bot, update):
+    def isPrime(n):
+        if n < 2:
+            return False
+        for number in islice(count(2), int(sqrt(n) - 1)):
+            if n % number == 0:
+                return False
+        return True
+
+    n = int(update.message.text.split()[1])
+    if n > 10:
+        text = "Sim" if isPrime(n) else "Não"
+        update.message.reply_text(text)
+    else:
+        update.message.reply_text("Ta de sacanagem né?")
+
 
 def mute(bot, update):
     chat_id = update.message.chat_id
-    admins = [str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)]
+    admins = [
+        str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)
+    ]
     user = update.message.from_user.username
-    who = '705600029'
+    who = "705600029"
     if user in admins:
-        bot.send_message(chat_id = chat_id, text = 'Cala a boca Machado...')
+        bot.restrict_chat_member(chat_id, who, can_send_messages=False)
+        bot.send_message(chat_id=chat_id, text="Cala a boca Machado...")
     else:
-        bot.send_message(chat_id = chat_id, text = 'So para admins')
-    bot.restrict_chat_member(chat_id, who, can_send_messages=False)
+        update.message.reply_text("So para admins")
+
 
 def unmute(bot, update):
     chat_id = update.message.chat_id
-    admins = [str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)]
+    admins = [
+        str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)
+    ]
     user = update.message.from_user.username
-    who = '705600029'
+    who = "705600029"
     if user in admins:
-        bot.send_message(chat_id = chat_id, text = 'Fala gado!')
+        bot.restrict_chat_member(
+            chat_id,
+            who,
+            can_send_messages=True,
+            can_send_media_messages=True,
+            can_send_other_messages=True,
+            can_add_web_page_previews=True,
+        )
+        bot.send_message(chat_id=chat_id, text="Fala gado!")
     else:
-        bot.send_message(chat_id = chat_id, text = 'So para admins')
-    bot.promote_chat_member(chat_id, who)
+        update.message.reply_text("So para admins")
 
-
-# def divida(bot, update):
-#     text = update.message.text  
-#     if 'deve' in text: # /divida jonck me deve 15
-#         me = update.message.from_user.username
-#         t = text.split()
-#         to = t[1]
-#         val = t[-1]
-#         add_div(me,to+' '+val)
-#     if 'paguei' in text: # /divida paguei 15 ao jonck
-#         me = update.message.from_user.username
-#         t = text.split()
-#         to = t[-1]
-#         val = t[2]
-#         add_div(me,to+' '+val)
-#     if 'minhas dividas' in text:
-#         me = update.message.from_user.username
-#         update.message.reply_text(show_div(me))
-#     if 'help' in text:
-#         bot.send_message(chat_id = update.message.chat_id,
-#                                     text = '/divida (quem te deve) me deve (valor)\n'+
-#                                             '/divida paguei (valor) (quem tu pagou)\n\n'+
-#                                             'Padrão dos nomes\n'+
-#                                             'Gasparini\nWeiss\nCarol\nJonck\nLuiza')
 
 def error(bot, update, error):
-        logger.warning('Update "%s" caused error "%s"', update, error)
+    logger.warning('Update "%s" caused error "%s"', update, error)
+
 
 def main():
     """Start the bot."""
@@ -213,6 +211,7 @@ def main():
     dp.add_handler(CommandHandler("export_meme", export_meme))
     dp.add_handler(CommandHandler("roll", roll))
     dp.add_handler(CommandHandler("even_odd", even_odd))
+    dp.add_handler(CommandHandler("primo", primo))
     dp.add_handler(CommandHandler("mute", mute))
     dp.add_handler(CommandHandler("unmute", unmute))
     # dp.add_handler(CommandHandler("divida", divida))
@@ -230,12 +229,28 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
-    quotes = set(('Weiss caga pau', 'socável', 'campeão sul brasileiro',
-        'o balão mais rapido do brasil', 'o cara que anima o time',
-        'carregou mais que Noé', 'cade meu vinho', 'Jonck me deve 25 pila',
-        'sou o mais parceiro', 'Adilsoney' , 'Poderia ser pior... Podia ser Adilson',
-        'só trocar o if por um for', 'dieta Cattonica', 'três passos a frente',
-        'qué vê?', 'se der bizu…', 'confia no rand()', 'uma salva de palmas...',
-        'gadão'))
-    main()  
+if __name__ == "__main__":
+    memes = set(
+        (
+            "Weiss caga pau",
+            "socável",
+            "campeão sul brasileiro",
+            "o balão mais rapido do brasil",
+            "o cara que anima o time",
+            "carregou mais que Noé",
+            "cade meu vinho",
+            "Jonck me deve 25 pila",
+            "sou o mais parceiro",
+            "Adilsoney",
+            "Poderia ser pior... Podia ser Adilson",
+            "só trocar o if por um for",
+            "dieta Cattonica",
+            "três passos a frente",
+            "qué vê?",
+            "se der bizu…",
+            "confia no rand()",
+            "uma salva de palmas...",
+            "gadão",
+        )
+    )
+    main()
