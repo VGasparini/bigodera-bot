@@ -104,21 +104,23 @@ def add_meme(bot, update):
     if len(text) < 5:
         update.message.reply_text("Que meme mixuruca... vou botar isso não")
     else:
-        memes.add(text+'\n')
+        memes.add(text + "\n")
         save(memes)
         update.message.reply_text("Adicionado. Memes ativos: {}".format(len(memes)))
 
 
 def export_meme(bot, update):
-    f = open("memes","r")
+    f = open("memes", "r")
     lines = f.readlines()
     cont = 1
-    text = ''
+    text = ""
     for line in lines:
         text += line
         cont += 1
     f.close()
-    bot.send_message(chat_id = update.message.chat_id, text="Memes "+str(cont)+"\n\n"+text)
+    bot.send_message(
+        chat_id=update.message.chat_id, text="Memes " + str(cont) + "\n\n" + text
+    )
 
 
 def roll(bot, update):
@@ -154,30 +156,31 @@ def primo(bot, update):
             if n % number == 0:
                 return False
         return True
-    
-    def coPrime(a,b):
-        return gcd(a,b)==1
 
-    numbers = list(map(int,update.message.text.split()[1:]))
+    def coPrime(a, b):
+        return gcd(a, b) == 1
+
+    numbers = list(map(int, update.message.text.split()[1:]))
     if len(numbers) == 1:
         if numbers > 10:
             text = "Sim" if isPrime(numbers) else "Não"
         else:
             update.message.reply_text("Ta de sacanagem né?")
     elif len(numbers) == 2:
-        text = ''
+        text = ""
         for n in numbers:
             if isPrime(n):
-                text += str(n)+'é primo\n'
+                text += str(n) + " é primo\n"
             else:
-                text += str(n)+'não é primo\n'
-        if coPrime(numbers[0],numbers[1]):
-            text += 'São coprimos entre si'
+                text += str(n) + " não é primo\n"
+        if coPrime(numbers[0], numbers[1]):
+            text += "São coprimos"
         else:
-            text += 'Não são comprimos entre si'
+            text += "Não são coprimos"
     else:
-        text = 'Mano, para de querer zoar'
+        text = "Mano, para de querer zoar"
     update.message.reply_text(text)
+
 
 def mute(bot, update):
     chat_id = update.message.chat_id
@@ -196,7 +199,9 @@ def mute(bot, update):
         bot.restrict_chat_member(chat_id, ID, can_send_messages=False)
         bot.send_message(chat_id=chat_id, text="Cala a boca Machado...")
     else:
-        update.message.reply_text("Vai trouxa... agora ta banido\nEu avisei que era só pra admin")
+        update.message.reply_text(
+            "Vai trouxa... agora ta banido\nEu avisei que era só pra admin"
+        )
 
 
 def unmute(bot, update):
@@ -260,8 +265,9 @@ def main():
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
+
 def load():
-    f = open("memes","r")
+    f = open("memes", "r")
     memes = set()
     lines = f.readlines()
     for line in lines:
@@ -269,8 +275,9 @@ def load():
     f.close()
     return memes
 
+
 def save(memes):
-    f = open("memes","w")
+    f = open("memes", "w")
     for meme in memes:
         f.write(meme)
     f.close()
