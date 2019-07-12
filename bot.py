@@ -238,6 +238,20 @@ def load():
     f.close()
     return memes
 
+def show_memes(bot, update):
+    f = open("memes","r")
+    memes = set()
+    lines = f.readlines()
+    cont = 1
+    text = ''
+    for line in lines:
+        memes.add(line)
+        text += line
+        cont += 1
+    bot.send_message(update.message.chat_id, text="Memes "+cont+"\n\n"+text)
+    f.close()
+    return memes
+
 def save(memes):
     f = open("memes","w")
     for meme in memes:
