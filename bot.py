@@ -110,11 +110,16 @@ def add_meme(bot, update):
 
 
 def export_meme(bot, update):
-    text = ""
-    for meme in memes:
-        text += meme + "\n"
-    bot.send_message(chat_id=update.message.chat_id, text=text)
-
+    f = open("memes","r")
+    lines = f.readlines()
+    cont = 1
+    text = ''
+    for line in lines:
+        text += line
+        cont += 1
+    f.close()
+    bot.send_message(chat_id = update.message.chat_id, text="Memes "+cont+"\n\n"+text)
+        
 
 def roll(bot, update):
     text = update.message.text.split()
@@ -250,7 +255,6 @@ def show_memes(bot, update):
         cont += 1
     bot.send_message(update.message.chat_id, text="Memes "+cont+"\n\n"+text)
     f.close()
-    return memes
 
 def save(memes):
     f = open("memes","w")
