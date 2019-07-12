@@ -5,10 +5,10 @@ from telegram import Chat
 import logging
 import random as r
 import time
-from math import sqrt
+from math import sqrt, gcd
 from itertools import count, islice
 
-token = "753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU"
+token = os.environ["TELEGRAM_TOKEN"]
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -154,14 +154,30 @@ def primo(bot, update):
             if n % number == 0:
                 return False
         return True
+    
+    def coPrime(a,b):
+        return gcd(a,b)==1
 
-    n = int(update.message.text.split()[1])
-    if n > 10:
-        text = "Sim" if isPrime(n) else "Não"
-        update.message.reply_text(text)
+    numbers = list(map(int,update.message.text.split()[1:]))
+    if len(numbers) == 1:
+        if numbers > 10:
+            text = "Sim" if isPrime(numbers) else "Não"
+        else:
+            update.message.reply_text("Ta de sacanagem né?")
+    elif len(numbers) == 2:
+        text = ''
+        for n in numbers:
+            if isPrime(n):
+                text += str(n)+'é primo\n'
+            else:
+                text += str(n)+'não é primo\n'
+        if coPrime(numbers[0],numbers[1]):
+            text += 'São coprimos entre si'
+        else:
+            text += 'Não são comprimos entre si'
     else:
-        update.message.reply_text("Ta de sacanagem né?")
-
+        text = 'Mano, para de querer zoar'
+    update.message.reply_text(text)
 
 def mute(bot, update):
     chat_id = update.message.chat_id
@@ -169,12 +185,18 @@ def mute(bot, update):
         str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)
     ]
     user = update.message.from_user.username
-    who = "705600029"
+    who = update.message.text.split()[1]
+    if who == "machado":
+        ID = "705600029"
+    elif who == "jaasiel":
+        ID = "706290557"
+    else:
+        ID = update.message.from_user.id
     if user in admins:
-        bot.restrict_chat_member(chat_id, who, can_send_messages=False)
+        bot.restrict_chat_member(chat_id, ID, can_send_messages=False)
         bot.send_message(chat_id=chat_id, text="Cala a boca Machado...")
     else:
-        update.message.reply_text("So para admins")
+        update.message.reply_text("Vai trouxa... agora ta banido\nEu avisei que era só pra admin")
 
 
 def unmute(bot, update):
@@ -183,7 +205,11 @@ def unmute(bot, update):
         str(admin.user.username) for admin in bot.get_chat_administrators(chat_id)
     ]
     user = update.message.from_user.username
-    who = "705600029"
+    who = update.message.text.split()[1]
+    if who == "machado":
+        ID = "705600029"
+    elif who == "jaasiel":
+        ID = "706290557"
     if user in admins:
         bot.restrict_chat_member(
             chat_id,
