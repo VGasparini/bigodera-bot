@@ -213,7 +213,7 @@ def unmute(bot, update):
     if user in admins:
         bot.restrict_chat_member(
             chat_id,
-            who,
+            ID,
             can_send_messages=True,
             can_send_media_messages=True,
             can_send_other_messages=True,
