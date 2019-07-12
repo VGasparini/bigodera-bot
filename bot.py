@@ -104,7 +104,8 @@ def add_meme(bot, update):
     if len(text) < 5:
         update.message.reply_text("Que meme mixuruca... vou botar isso não")
     else:
-        memes.add(text)
+        memes.add(text+'\n')
+        save(memes)
         update.message.reply_text("Adicionado. Memes ativos: {}".format(len(memes)))
 
 
@@ -228,29 +229,22 @@ def main():
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
+def load():
+    f = open("memes","r")
+    memes = set()
+    lines = f.readlines()
+    for line in lines:
+        memes.add(line)
+    f.close()
+    return memes
+
+def save(memes):
+    f = open("memes","w")
+    for meme in memes:
+        f.write(meme)
+    f.close()
+
 
 if __name__ == "__main__":
-    memes = set(
-        (
-            "Weiss caga pau",
-            "socável",
-            "campeão sul brasileiro",
-            "o balão mais rapido do brasil",
-            "o cara que anima o time",
-            "carregou mais que Noé",
-            "cade meu vinho",
-            "Jonck me deve 25 pila",
-            "sou o mais parceiro",
-            "Adilsoney",
-            "Poderia ser pior... Podia ser Adilson",
-            "só trocar o if por um for",
-            "dieta Cattonica",
-            "três passos a frente",
-            "qué vê?",
-            "se der bizu…",
-            "confia no rand()",
-            "uma salva de palmas...",
-            "gadão",
-        )
-    )
+    memes = load()
     main()
