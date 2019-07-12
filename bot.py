@@ -209,7 +209,7 @@ def main():
     dp.add_handler(CommandHandler("greet", greet))
     dp.add_handler(CommandHandler("meme", meme))
     dp.add_handler(CommandHandler("add_meme", add_meme))
-    dp.add_handler(CommandHandler("export_meme", export_meme))
+    dp.add_handler(CommandHandler("export_meme", show_meme))
     dp.add_handler(CommandHandler("roll", roll))
     dp.add_handler(CommandHandler("even_odd", even_odd))
     dp.add_handler(CommandHandler("primo", primo))
