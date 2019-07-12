@@ -8,7 +8,7 @@ import time
 from math import sqrt
 from itertools import count, islice
 
-token = os.environ["TELEGRAM_TOKEN"]
+token = "753464946:AAEn_H8nVJBaNAY3rDAtrQSdftOE4NOepdU"
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -118,8 +118,8 @@ def export_meme(bot, update):
         text += line
         cont += 1
     f.close()
-    bot.send_message(chat_id = update.message.chat_id, text="Memes "+cont+"\n\n"+text)
-        
+    bot.send_message(chat_id = update.message.chat_id, text="Memes "+str(cont)+"\n\n"+text)
+
 
 def roll(bot, update):
     text = update.message.text.split()
@@ -214,7 +214,7 @@ def main():
     dp.add_handler(CommandHandler("greet", greet))
     dp.add_handler(CommandHandler("meme", meme))
     dp.add_handler(CommandHandler("add_meme", add_meme))
-    dp.add_handler(CommandHandler("export_meme", show_memes))
+    dp.add_handler(CommandHandler("export_meme", export_meme))
     dp.add_handler(CommandHandler("roll", roll))
     dp.add_handler(CommandHandler("even_odd", even_odd))
     dp.add_handler(CommandHandler("primo", primo))
@@ -242,19 +242,6 @@ def load():
         memes.add(line)
     f.close()
     return memes
-
-def show_memes(bot, update):
-    f = open("memes","r")
-    memes = set()
-    lines = f.readlines()
-    cont = 1
-    text = ''
-    for line in lines:
-        memes.add(line)
-        text += line
-        cont += 1
-    bot.send_message(update.message.chat_id, text="Memes "+cont+"\n\n"+text)
-    f.close()
 
 def save(memes):
     f = open("memes","w")
