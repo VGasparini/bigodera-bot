@@ -197,10 +197,10 @@ def mute(bot, update):
         ID = update.message.from_user.id
     if user in admins:
         bot.restrict_chat_member(chat_id, ID, can_send_messages=False)
-        bot.send_message(chat_id=chat_id, text="Cala a boca Machado...")
+        bot.send_message(chat_id=chat_id, text="Cala a boca "+who.capitalize())
     else:
         update.message.reply_text(
-            "Vai trouxa... agora ta banido\nEu avisei que era só pra admin"
+            "Vai trouxa... agora ta mutado\nEu avisei que era só pra admin"
         )
 
 
