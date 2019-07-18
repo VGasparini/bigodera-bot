@@ -162,8 +162,8 @@ def primo(bot, update):
 
     numbers = list(map(int, update.message.text.split()[1:]))
     if len(numbers) < 2:
-        if numbers > 10:
-            text = "Sim" if isPrime(numbers) else "Não"
+        if numbers[0] > 10:
+            text = "Sim" if isPrime(numbers[0]) else "Não"
         else:
             update.message.reply_text("Ta de sacanagem né?")
     elif len(numbers) == 2:
