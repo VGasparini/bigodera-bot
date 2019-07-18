@@ -161,7 +161,7 @@ def primo(bot, update):
         return gcd(a, b) == 1
 
     numbers = list(map(int, update.message.text.split()[1:]))
-    if len(numbers) == 1:
+    if len(numbers) < 2:
         if numbers > 10:
             text = "Sim" if isPrime(numbers) else "Não"
         else:
