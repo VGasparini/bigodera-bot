@@ -14,6 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 updater = Updater(token)
+contador_caga_pau = 0
 
 # Functions noncommand
 def noncommand(bot, update):
@@ -51,6 +52,10 @@ def noncommand(bot, update):
             "final da nacional",
         ]
         ret = r.choice(quotes)
+    elif "contador_caga_pau++" in text:
+        global contador_caga_pau
+        contador_caga_pau += 1
+        ret = "Cagadas de pau: "+str(contador_caga_pau)
     if ret:
         update.message.reply_text(ret)
 
