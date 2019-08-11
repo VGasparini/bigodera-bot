@@ -257,7 +257,7 @@ def main():
     dp.add_handler(CommandHandler("primo", primo))
     dp.add_handler(CommandHandler("mute", mute))
     dp.add_handler(CommandHandler("unmute", unmute))
-    dp.add_handler(CommandHandler("contador_caga_pau++", cont_caga))
+    dp.add_handler(CommandHandler("contador_caga_pau", cont_caga))
     # dp.add_handler(CommandHandler("divida", divida))
 
     # Noncommand answser message on Telegram
