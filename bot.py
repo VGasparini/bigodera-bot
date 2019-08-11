@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 updater = Updater(token)
-contador_caga_pau = 3
+contador_caga_pau = 2
 
 # Functions noncommand
 def noncommand(bot, update):
@@ -52,10 +52,7 @@ def noncommand(bot, update):
             "final da nacional",
         ]
         ret = r.choice(quotes)
-    elif "contador_caga_pau++" in text:
-        global contador_caga_pau
-        contador_caga_pau += 1
-        ret = "Cagadas de pau: "+str(contador_caga_pau)
+    
     if ret:
         update.message.reply_text(ret)
 
@@ -233,6 +230,10 @@ def unmute(bot, update):
     else:
         update.message.reply_text("So para admins")
 
+def cont_caga(bot, update):
+    global contador_caga_pau
+    contador_caga_pau += 1
+    update.message.reply_text("Cagadas de pau: "+str(contador_caga_pau))
 
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
@@ -256,6 +257,7 @@ def main():
     dp.add_handler(CommandHandler("primo", primo))
     dp.add_handler(CommandHandler("mute", mute))
     dp.add_handler(CommandHandler("unmute", unmute))
+    dp.add_handler(CommandHandler("contador_caga_pau++", cont_caga))
     # dp.add_handler(CommandHandler("divida", divida))
 
     # Noncommand answser message on Telegram
