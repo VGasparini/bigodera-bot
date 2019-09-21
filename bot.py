@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import Chat
 from requests import post, get
@@ -12,11 +11,13 @@ from itertools import count, islice
 
 token = os.environ["TELEGRAM_TOKEN"]
 db_path = os.environ["DB_PATH"]
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 updater = Updater(token)
+contador_caga_pau, memes = 0,[]
 
 # Functions noncommand
 def noncommand(bot, update):
@@ -104,26 +105,25 @@ def meme(bot, update):
 
 
 def add_meme(bot, update):
+    load_data()
     text = " ".join(update.message.text.split()[1:])
     if len(text) < 5:
         update.message.reply_text("Muito pequeno")
     else:
-        memes.add(text + "\n")
+        memes.append(text + "\n")
         save_data()
         update.message.reply_text("Adicionado. Memes ativos: {}".format(len(memes)))
 
 
 def export_meme(bot, update):
-    f = open("memes", "r")
-    lines = f.readlines()
+    load_data()
     cont = 0
     text = ""
-    for line in lines:
-        text += line
+    for meme in memes:
+        text += meme+'\n'
         cont += 1
-    f.close()
     bot.send_message(
-        chat_id=update.message.chat_id, text="Memes " + str(cont) + "\n\n" + text
+        chat_id=update.message.chat_id, text="Memes " + str(len(memes)) + "\n\n" + text
     )
 
 
@@ -233,6 +233,7 @@ def unmute(bot, update):
         update.message.reply_text("So para admins")
 
 def cont_caga(bot, update):
+    global contador_caga_pau
     contador_caga_pau += 1
     save_data()
     update.message.reply_text("Cagadas de pau: "+str(contador_caga_pau))
@@ -276,11 +277,10 @@ def main():
 
 
 def load_data():
+    global contador_caga_pau, memes
     data = pull(db_path)
     contador_caga_pau = int(data[0])
     memes = data[1:]
-
-    return contador_caga_pau, memes
 
 def save_data():
     data = str(contador_caga_pau)+'\n'+'\n'.join(memes)
@@ -300,5 +300,5 @@ def push(path, text):
     return post(url=path, data=data)
 
 if __name__ == "__main__":
-    contador_caga_pau, memes = load_data()
+    load_data()
     main()
