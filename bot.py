@@ -2,6 +2,8 @@
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import Chat
+from requests import post, get
+from bs4 import BeautifulSoup
 import logging
 import random as r
 import time
@@ -9,12 +11,12 @@ from math import sqrt, gcd
 from itertools import count, islice
 
 token = os.environ["TELEGRAM_TOKEN"]
+db_path = os.environ["DB_PATH"]
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 updater = Updater(token)
-contador_caga_pau = 2
 
 # Functions noncommand
 def noncommand(bot, update):
@@ -104,17 +106,17 @@ def meme(bot, update):
 def add_meme(bot, update):
     text = " ".join(update.message.text.split()[1:])
     if len(text) < 5:
-        update.message.reply_text("Que meme mixuruca... vou botar isso não")
+        update.message.reply_text("Muito pequeno")
     else:
         memes.add(text + "\n")
-        save(memes)
+        save_data()
         update.message.reply_text("Adicionado. Memes ativos: {}".format(len(memes)))
 
 
 def export_meme(bot, update):
     f = open("memes", "r")
     lines = f.readlines()
-    cont = 1
+    cont = 0
     text = ""
     for line in lines:
         text += line
@@ -129,7 +131,7 @@ def roll(bot, update):
     text = update.message.text.split()
     if len(text) > 1:
         times, limit = map(int, text[1:])
-        if times < 50:
+        if times < 100:
             text = "Rolando!\n\n"
             for dice in range(1, times + 1):
                 text += str(r.randint(1, limit)) + "\n"
@@ -202,7 +204,7 @@ def mute(bot, update):
         bot.send_message(chat_id=chat_id, text="Cala a boca "+who.capitalize())
     else:
         update.message.reply_text(
-            "Vai trouxa... agora ta mutado\nEu avisei que era só pra admin"
+            "... cala boca tu"
         )
 
 
@@ -231,8 +233,8 @@ def unmute(bot, update):
         update.message.reply_text("So para admins")
 
 def cont_caga(bot, update):
-    global contador_caga_pau
     contador_caga_pau += 1
+    save_data()
     update.message.reply_text("Cagadas de pau: "+str(contador_caga_pau))
 
 def error(bot, update, error):
@@ -273,23 +275,30 @@ def main():
     updater.idle()
 
 
-def load():
-    f = open("memes", "r")
-    memes = set()
-    lines = f.readlines()
-    for line in lines:
-        memes.add(line)
-    f.close()
-    return memes
+def load_data():
+    data = pull(db_path)
+    contador_caga_pau = int(data[0])
+    memes = data[1:]
 
+    return contador_caga_pau, memes
 
-def save(memes):
-    f = open("memes", "w")
-    for meme in memes:
-        f.write(meme)
-    f.close()
+def save_data():
+    data = str(contador_caga_pau)+'\n'+'\n'.join(memes)
+    push(db_path, data)
 
+def pull(path):
+    data = get(url=path)
+    soup = BeautifulSoup(data.text,"html.parser")
+    old_text = soup.find('textarea').get_text()
+    old_text = old_text.split('\n')
+
+    return old_text
+
+def push(path, text):
+    data = {'text':text}
+
+    return post(url=path, data=data)
 
 if __name__ == "__main__":
-    memes = load()
+    contador_caga_pau, memes = load_data()
     main()
