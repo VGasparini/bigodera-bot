@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import Chat
 from requests import post, get
