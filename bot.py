@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
+import os, time
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import Chat
 from requests import post, get
@@ -269,6 +269,9 @@ def main():
 
     # log all errors
     dp.add_error_handler(error)
+
+    # Saving resources
+    time.sleep(25)
 
     # Start the Bot
     updater.start_polling()
