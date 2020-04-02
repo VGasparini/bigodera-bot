@@ -106,7 +106,8 @@ def meme(bot, update):
 
 def weiss(bot, update):
     data = pull('http://dontpad.com/db_bot_bigodera/aniversario')
-    text = ''.join(data).format('Weiss')
+    text = r.choice(tuple(memes))
+    text = text.format('Weiss')
     update.message.reply_text(text)
 
 
