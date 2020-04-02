@@ -105,7 +105,7 @@ def meme(bot, update):
     update.message.reply_text(text)
 
 def birthday(bot, update):
-    name = update.message.text.split()[1:]
+    name = ' '.join(update.message.text.split()[1:])
     data = pull('http://dontpad.com/db_bot_bigodera/aniversario')
     text = r.choice(tuple(data))
     text = text.format(name.capitalize())
