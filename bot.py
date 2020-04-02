@@ -104,6 +104,11 @@ def meme(bot, update):
     text = r.choice(tuple(memes))
     update.message.reply_text(text)
 
+def weiss(bot, update):
+    data = pull('http://dontpad.com/db_bot_bigodera/aniversario')
+    text = data.format('Weiss')
+    update.message.reply_text(text)
+
 
 def add_meme(bot, update):
     load_data()
@@ -262,6 +267,7 @@ def main():
     dp.add_handler(CommandHandler("mute", mute))
     dp.add_handler(CommandHandler("unmute", unmute))
     dp.add_handler(CommandHandler("contador_caga_pau", cont_caga))
+    dp.add_handler(CommandHandler("feliz_aniversario_weiss", weiss))
     # dp.add_handler(CommandHandler("divida", divida))
 
     # Noncommand answser message on Telegram
