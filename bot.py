@@ -10,8 +10,8 @@ import time
 from math import sqrt, gcd
 from itertools import count, islice
 
-token = os.environ["TELEGRAM_TOKEN"]
-db_path = os.environ["DB_PATH"]
+token = "1305940672:AAHHD8QjK74zZWjJGrHK_CkbUUy1j12iQ3o"
+db_path = "http://dontpad.com/igorzera"
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -60,7 +60,6 @@ def noncommand(bot, update):
     if ret:
         update.message.reply_text(ret)
 
-
 # Functions commanded
 def start(bot, update):
     chat_id = update.message.chat_id
@@ -78,6 +77,7 @@ def help(bot, update):
         + "/roll n t - Rola n dados de t faces\n"
         + "/even_odd - O famoso par ou impar\n"
         + "/primo n - Verifica se n é primo\n"
+        + "/calculadora a op b - Faz o calculo, bota espaço ex: /calcula 1 + 1\n"
         + "/mute - Apenas admins, muta o Machado\n"
         + "/unmute - Deixa o garoto falar merda vai..."
     )
@@ -151,6 +151,33 @@ def roll(bot, update):
         text = str(r.randint(1, 6)) + "\n"
     chat_id = update.message.chat_id
     bot.send_message(chat_id=chat_id, text=text)
+
+
+def calculadora(bot, update):
+    chat_id = update.message.chat_id
+    
+    msg = update.message.text.split()[1:]
+    try:
+        number1 = float(msg[0])
+        number2 = float(msg[2])
+        operation = msg[1]
+
+        text = ''
+        if operation=='+':
+            text = number1+number2
+        if operation=='-':
+            text = number1-number2
+        if operation=='*':
+            text = number1*number2
+        if operation=='/':
+            if number2==0:
+                text = "Você quebrou as regras!"
+            else:
+                text = number1/number2
+    except:
+        text = 'pfv bota com espaço, tipo: 1 + 1'
+
+    bot.send_message(chat_id=chat_id, text=str(text))
 
 
 def even_odd(bot, update):
@@ -272,6 +299,7 @@ def main():
     dp.add_handler(CommandHandler("unmute", unmute))
     dp.add_handler(CommandHandler("contador_caga_pau", cont_caga))
     dp.add_handler(CommandHandler("feliz_aniversario", birthday))
+    dp.add_handler(CommandHandler("calculadora", calculadora))
     # dp.add_handler(CommandHandler("divida", divida))
 
     # Noncommand answser message on Telegram
