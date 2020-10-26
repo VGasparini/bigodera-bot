@@ -77,7 +77,7 @@ def help(bot, update):
         + "/roll n t - Rola n dados de t faces\n"
         + "/even_odd - O famoso par ou impar\n"
         + "/primo n - Verifica se n é primo\n"
-        + "/calculadora a op b - Faz o calculo, bota espaço ex: /calcula 1 + 1\n"
+        + "/calculadora a op b - Faz o calculo, +,-,*,**,%,^ ex: 1 + 1\n"
         + "/mute - Apenas admins, muta o Machado\n"
         + "/unmute - Deixa o garoto falar merda vai..."
     )
@@ -165,17 +165,23 @@ def calculadora(bot, update):
         text = ''
         if operation=='+':
             text = number1+number2
-        if operation=='-':
+        elif operation=='-':
             text = number1-number2
-        if operation=='*':
+        elif operation=='*':
             text = number1*number2
-        if operation=='/':
+        elif operation=='/':
             if number2==0:
                 text = "Você quebrou as regras!"
             else:
                 text = number1/number2
+        elif operation=='^':
+            text = int(number1)^int(number2)
+        elif operation=='**':
+            text = number1**number2;
+        elif operation=='%':
+            text = number1%number2
     except:
-        text = 'pfv bota com espaço, tipo: 1 + 1'
+        text = 'hummm, n entendi'
 
     bot.send_message(chat_id=chat_id, text=str(text))
 
