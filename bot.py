@@ -10,8 +10,8 @@ import time
 from math import sqrt, gcd
 from itertools import count, islice
 
-token = "1305940672:AAHHD8QjK74zZWjJGrHK_CkbUUy1j12iQ3o"
-db_path = "http://dontpad.com/igorzera"
+token = os.environ["TELEGRAM_TOKEN"]
+db_path = os.environ["DB_PATH"]
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
