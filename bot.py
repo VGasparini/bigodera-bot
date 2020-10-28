@@ -153,7 +153,13 @@ def roll(bot, update):
     bot.send_message(chat_id=chat_id, text=text)
 
 
+
 def calculadora(bot, update):
+    def check_type(n):
+        if int(n) == float(n):
+            return int(n)
+        else:
+            return float(n)
     chat_id = update.message.chat_id
     
     msg = update.message.text.split()[1:]
@@ -183,7 +189,7 @@ def calculadora(bot, update):
     except:
         text = 'hummm, n entendi'
 
-    bot.send_message(chat_id=chat_id, text=str(text))
+    bot.send_message(chat_id=chat_id, text=str(check_type(text)))
 
 
 def even_odd(bot, update):
