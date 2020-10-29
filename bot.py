@@ -190,8 +190,11 @@ def calculadora(bot, update):
             text = log(number2, number1)
     except:
         text = 'hummm, n entendi'
+    
+    if (text.isnumeric()):
+        text = str(check_type(text))
 
-    bot.send_message(chat_id=chat_id, text=str(check_type(text)))
+    bot.send_message(chat_id=chat_id, text=text)
 
 
 def even_odd(bot, update):
