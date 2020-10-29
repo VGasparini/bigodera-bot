@@ -188,9 +188,12 @@ def calculadora(bot, update):
             text = number1%number2
         elif operation=='log':
             text = log(number2, number1)
+        elif operation=='gcd':
+            text = gcd(number1, number2)
     except:
         text = 'hummm, n entendi'
     
+    text = str(text)
     if (text.isnumeric()):
         text = str(check_type(text))
 
