@@ -189,6 +189,8 @@ def calculadora(bot, update):
         elif operation=='log':
             text = log(number2, number1)
         elif operation=='gcd':
+            number1 = int(number1)
+            number2 = int(number2)
             text = gcd(number1, number2)
     except:
         text = 'hummm, n entendi'
