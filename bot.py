@@ -56,7 +56,7 @@ def noncommand(bot, update):
             "final da nacional",
         ]
         ret = r.choice(quotes)
-    
+
     if ret:
         update.message.reply_text(ret)
 
@@ -161,7 +161,7 @@ def calculadora(bot, update):
         else:
             return float(n)
     chat_id = update.message.chat_id
-    
+
     msg = update.message.text.split()[1:]
     try:
         number1 = float(msg[0])
@@ -234,6 +234,54 @@ def primo(bot, update):
         text = "Mano, para de querer zoar"
     update.message.reply_text(text)
 
+def fatorar(bot, update):
+    def verify_integer(x):
+        try:
+            int(x)
+            return True
+        except ValueError:
+            return False
+    def factorization(x):
+        ans = ''
+        aux = 3
+        while (x > 1):
+            if (not x%2):
+                ans += '2 '
+                x = x//2
+                continue
+            else:
+                flag = False
+                for i in range(aux,int(x**(1/2))+1,2):
+                    if (not x%i):
+                        ans += str(i) + ' '
+                        x = x//i
+                        aux = i
+                        flag = True
+                        break
+                if not flag:
+                    ans += str(x) + ' '
+                    break
+        ans = ans[:len(ans)-1]
+        return ans
+    numbers = update.message.text.split()[1:]
+    if len(numbers) <= 10 and len(numbers) > 0:
+        text = ''
+        for number in numbers:
+            if not verify_integer(number):
+                text += number+' é estranho, me parece arriscado fatorar'
+            else:
+                number = int(number)
+                if (number < 1):
+                    text += str(number)+' é estranho, me parece arriscado fatorar'
+                elif (number == 1):
+                    text += '1: 1\n'
+                elif (number > 2**50):
+                    text += str(number)+' é muito grande pra mim\n'
+                else:
+                    text += str(number)+': ' + factorization(number) + '\n'
+        update.message.reply_text(text)
+    else:
+        update.message.reply_text('Não exagera também')
 
 def mute(bot, update):
     chat_id = update.message.chat_id
@@ -307,6 +355,7 @@ def main():
     dp.add_handler(CommandHandler("roll", roll))
     dp.add_handler(CommandHandler("even_odd", even_odd))
     dp.add_handler(CommandHandler("primo", primo))
+    dp.add_handler(CommandHandler('fatorar', fatorar))
     dp.add_handler(CommandHandler("mute", mute))
     dp.add_handler(CommandHandler("unmute", unmute))
     dp.add_handler(CommandHandler("contador_caga_pau", cont_caga))
