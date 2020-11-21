@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import logging
 import random as r
 import time
-from math import sqrt, gcd
+from math import sqrt, gcd, log
 from itertools import count, islice
 
 token = os.environ["TELEGRAM_TOKEN"]
@@ -186,10 +186,20 @@ def calculadora(bot, update):
             text = number1**number2;
         elif operation=='%':
             text = number1%number2
+        elif operation=='log':
+            text = log(number2, number1)
+        elif operation=='gcd':
+            number1 = int(number1)
+            number2 = int(number2)
+            text = gcd(number1, number2)
     except:
         text = 'hummm, n entendi'
+    
+    text = str(text)
+    if (text.isnumeric()):
+        text = str(check_type(text))
 
-    bot.send_message(chat_id=chat_id, text=str(check_type(text)))
+    bot.send_message(chat_id=chat_id, text=text)
 
 
 def even_odd(bot, update):
