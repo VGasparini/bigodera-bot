@@ -13,9 +13,9 @@ Em todos os endpoints que atualmente usam a chave `'1'`, a resposta deverá vir 
 Agora será enviado sempre o seguinte payload
 ```json
 {
-    "id_telegram" = user_id,
-    "rating": rating,
-    "tags": tags
+    "id_telegram": "user_id",
+    "rating": "rating",
+    "tags": "tags"
 }
 ```
 * Todos os campos serão do tipo `string`
@@ -26,7 +26,7 @@ Endpoint agora deverá ser `/mais_uma_cagada` e deverá esperar um `POST`
 Payload enviado será
 ```json
 {
-    "amount" = 1,
+    "amount": 1,
 }
 ```
 `amount` será um número inteiro. No momento será fixo 1
@@ -40,7 +40,6 @@ Payload enviado será
     "dices": [
         "1": 5
         "2": 12
-        ...
     ]
 }
 
